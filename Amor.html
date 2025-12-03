@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cofre de Amor para Erika</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Charmonman:wght@700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* VARIABLES DE COLOR */
+        :root {
+            --magic-pink: #ff69b4;     /* Rosa Mágico/Fucsia */
+            --golden-glow: #ffd700;    /* Dorado Puro */
+            --dark-accent: #8e003a;    /* Borgoña Oscuro para detalles */
+            --soft-bg: #fff0f5;        /* Fondo muy suave */
+            --parchment-bg: #fff8dc;   /* Fondo de pergamino */
+        }
+
+        /* 1. INTERFAZ INICIAL (EL COFRE ENCANTADO) */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, var(--soft-bg) 0%, #ffebee 100%);
+            color: var(--dark-accent);
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+        }
+
+        /* [ANIMACIONES DE FONDO ANTERIORES - CORAZONES Y DUST] */
+        .heart-glow-container { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .heart-glow { position: absolute; background: var(--magic-pink); width: 30px; height: 30px; transform: rotate(-45deg); opacity: 0; animation: floatGlow 20s linear infinite; box-shadow: 0 0 15px var(--magic-pink); }
+        .heart-glow::before, .heart-glow::after { content: ""; position: absolute; width: 30px; height: 30px; background: inherit; border-radius: 50%; }
+        .heart-glow::before { top: -15px; left: 0; }
+        .heart-glow::after { top: 0; right: 15px; }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 100vh) rotate(-45deg) scale(0.5); opacity: 0; }
+            30% { opacity: 0.8; transform: translate(var(--translateX, 0), 70vh) rotate(-45deg) scale(1); }
+            70% { opacity: 0.8; transform: translate(var(--translateX, 0), 30vh) rotate(-45deg) scale(1.2); }
+            100% { transform: translate(0, -10vh) rotate(-45deg) scale(0.8); opacity: 0; }
+        }
+        .pixie-dust-container { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+        .pixie-dust { position: absolute; width: 5px; height: 5px; background: var(--golden-glow); border-radius: 50%; opacity: 0; animation: dustTwinkle 10s ease-out infinite; box-shadow: 0 0 8px var(--golden-glow); }
+        @keyframes dustTwinkle {
+            0% { transform: translate(var(--startX), var(--startY)) scale(0.2); opacity: 0; }
+            20% { opacity: 0.7; transform: translate(var(--midX), var(--midY)) scale(1); }
+            80% { opacity: 0.7; transform: translate(var(--endX), var(--endY)) scale(0.8); }
+            100% { opacity: 0; transform: translate(var(--endX), var(--endY)) scale(0.5); }
+        }
+
+        /* Contenido Principal (El Cofre/Libro) */
+        .main-content {
+            text-align: center;
+            z-index: 10;
+            padding: 50px 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.2);
+            border: 4px solid var(--golden-glow); 
+            position: relative;
+            transform: scale(1);
+            transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+            animation: breathing 3s infinite alternate ease-in-out, borderPulse 4s infinite ease-in-out; /* Borde Mágico Pulsante */
+        }
+        
+        /* NUEVO: Borde Mágico Pulsante */
+        @keyframes borderPulse {
+            0% { border-color: var(--golden-glow); box-shadow: 0 20px 80px rgba(0, 0, 0, 0.2), 0 0 10px var(--golden-glow); }
+            100% { border-color: var(--magic-pink); box-shadow: 0 20px 80px rgba(0, 0, 0, 0.3), 0 0 25px var(--magic-pink); }
+        }
+        @keyframes breathing {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.01); }
+        }
+
+        /* Corazones de Sombra Flotantes - [Mantiene el efecto] */
+        .main-content::before, .main-content::after {
+            content: ''; position: absolute; background: rgba(142, 0, 58, 0.2); width: 15px; height: 15px; transform: rotate(-45deg); border-radius: 0; z-index: -1; animation: shadowFloat 4s infinite ease-in-out;
+        }
+        .main-content::before { top: -20px; left: 10%; animation-delay: 0s; }
+        .main-content::after { bottom: -20px; right: 15%; animation-delay: 2s; }
+        .main-content::before::before, .main-content::before::after, .main-content::after::before, .main-content::after::after { content: ""; position: absolute; width: 15px; height: 15px; background: inherit; border-radius: 50%; }
+        .main-content::before::before { top: -7.5px; left: 0; }
+        .main-content::before::after { top: 0; right: 7.5px; }
+        .main-content::after::before { top: -7.5px; left: 0; }
+        .main-content::after::after { top: 0; right: 7.5px; }
+        @keyframes shadowFloat {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 0.5; }
+            50% { transform: translate(5px, -5px) rotate(-45deg); opacity: 0.8; }
+            100% { transform: translate(0, 0) rotate(-45deg); opacity: 0.5; }
+        }
+
+        /* Título Principal */
+        .title {
+            font-family: 'Charmonman', cursive; font-size: 4.5rem; color: var(--dark-accent); text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px; letter-spacing: 1px; position: relative; z-index: 1;
+        }
+        .title::before { 
+            content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 80%; height: 5px;
+            background: linear-gradient(to right, transparent, var(--golden-glow), transparent); border-radius: 5px; opacity: 0.7;
+            animation: titleGlow 3s infinite alternate;
+        }
+        @keyframes titleGlow { 0% { opacity: 0.7; width: 80%; } 100% { opacity: 1; width: 90%; } }
+
+        /* Botón Corazón - El Sello Mágico */
+        .heart-button {
+            position: relative; width: 180px; height: 162px; background: var(--magic-pink); border: none; cursor: pointer; transform: rotate(-45deg);
+            box-shadow: 0 0 35px var(--magic-pink); transition: all 0.4s ease-in-out; margin: 60px 0 20px 0; outline: none; z-index: 10;
+            border-radius: 0; border: 5px solid var(--golden-glow); animation: pulseMagicHeart 2s infinite alternate ease-in-out; 
+        }
+        .heart-button::before, .heart-button::after { content: ""; position: absolute; width: 180px; height: 180px; background: var(--magic-pink); border-radius: 50%; border: 5px solid var(--golden-glow); }
+        .heart-button::before { top: -90px; left: 0; }
+        .heart-button::after { top: 0; right: 90px; }
+        .button-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); color: white;
+            font-size: 1.8rem; font-weight: 700; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 5px var(--dark-accent);
+            font-family: 'Quicksand', sans-serif; z-index: 15;
+        }
+        @keyframes pulseMagicHeart {
+            0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 35px var(--magic-pink); }
+            100% { transform: rotate(-45deg) scale(1.1); box-shadow: 0 0 60px var(--magic-pink), 0 0 20px var(--golden-glow); }
+        }
+        .heart-button:hover { transform: rotate(-45deg) scale(1.15); box-shadow: 0 0 80px var(--magic-pink), 0 0 30px var(--golden-glow); animation: none; }
+        
+        /* Vuelve a agregar este texto de instrucción */
+        .instruction-text {
+            color: var(--dark-accent);
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        /* ------------------ NUEVO: EXPLOSIÓN DE CORAZONES 3D (TRANSICIÓN) ------------------ */
+
+        .transition-effect {
+            position: relative;
+        }
+        
+        /* Contenedor temporal para la explosión */
+        .transition-effect::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 0; height: 0;
+            background-color: transparent;
+            z-index: 9999;
+            pointer-events: none;
+            /* Usamos la animación mágica anterior para la expansión rápida del cofre, pero sin color */
+            animation: magicalReveal 0.8s forwards; 
+        }
+
+        /* Estilos de los corazones que explotan */
+        .exploding-heart {
+            position: fixed;
+            width: 15px; height: 15px;
+            background: var(--magic-pink);
+            opacity: 0;
+            border-radius: 0;
+            transform: rotate(-45deg);
+            z-index: 10000;
+        }
+        .exploding-heart::before, .exploding-heart::after {
+            content: "";
+            position: absolute;
+            width: 15px; height: 15px;
+            background: inherit;
+            border-radius: 50%;
+        }
+        .exploding-heart::before { top: -7.5px; left: 0; }
+        .exploding-heart::after { top: 0; right: 7.5px; }
+
+        @keyframes explodeHeart {
+            0% { transform: translate(0, 0) scale(1) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(var(--endX), var(--endY)) scale(0) rotate(180deg); opacity: 0; }
+        }
+        
+        /* 2. INTERFAZ DESTINO (CARTA DE PERGAMINO ENCANTADO) */
+        
+        /* Estilos de la Carta (Fondo más cálido) */
+        #destination-interface {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #fce4ec 0%, #fbeff3 100%); 
+            display: flex; justify-content: center; align-items: center; z-index: 999; opacity: 0; transition: opacity 1s ease-in-out; pointer-events: none;
+        }
+        #destination-interface.show { opacity: 1; pointer-events: auto; }
+        
+        .love-card {
+            width: 85%; max-width: 950px; background: var(--parchment-bg); padding: 60px; border-radius: 15px;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.2); border: 8px double var(--golden-glow); text-align: left;
+            overflow-y: auto; max-height: 95vh; display: grid; grid-template-columns: 2fr 1fr; gap: 50px;
+            position: relative; animation: fadeInCard 1.5s ease-out;
+        }
+
+        /* NUEVO: Animación de Escritura para el encabezado */
+        .card-header {
+            font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--dark-accent); margin-bottom: 30px;
+            border-bottom: 2px dashed var(--magic-pink); padding-bottom: 15px; grid-column: 1 / 3; text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+            /* Ocultamos el texto inicialmente para el efecto de escritura */
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid var(--magic-pink); /* Simula el cursor */
+            animation: typing 3s steps(35, end), blink-caret .75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--magic-pink); }
+        }
+        .card-header span {
+            font-family: 'Charmonman', cursive; font-size: 1.1em; color: var(--magic-pink); margin-left: 10px;
+        }
+
+
+        /* Detalle de Sello de Cera más prominente */
+        .wax-seal {
+            position: absolute; top: 20px; right: 20px; width: 80px; height: 80px; background: var(--magic-pink);
+            border-radius: 50%; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); display: flex; justify-content: center;
+            align-items: center; font-family: 'Charmonman', cursive; font-size: 2rem; color: white;
+            text-shadow: 1px 1px 2px var(--dark-accent); transform: rotate(10deg); animation: sealPulse 2s infinite alternate;
+        }
+
+        /* CUERPO DE LA CARTA: Detalles románticos */
+        .card-body p {
+            padding: 10px 0; border-left: 3px solid var(--magic-pink); margin-left: 5px; padding-left: 15px; transition: border-left 0.3s ease;
+        }
+        .card-body p:hover { border-left: 3px solid var(--golden-glow); }
+        .card-body strong { color: var(--dark-accent); font-weight: 700; }
+
+        /* IMÁGENES: ANIMACIÓN DE FLOTACIÓN SUTIL */
+        .image-placeholder {
+            width: 100%; max-width: 300px; height: 220px; background-color: #ffe0eb;
+            border: 7px solid var(--golden-glow); border-radius: 10px; display: flex;
+            justify-content: center; align-items: center; font-size: 1rem; color: var(--dark-accent);
+            font-weight: 700; text-align: center; overflow: hidden;
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2);
+            transform: rotate(var(--img-rotate, -3deg)); transition: transform 0.3s ease;
+            animation: imageFloat 5s infinite alternate ease-in-out; 
+        }
+        @keyframes imageFloat {
+            0% { transform: translateY(0px) rotate(var(--img-rotate, -3deg)); }
+            100% { transform: translateY(-5px) rotate(var(--img-rotate, -3deg)); }
+        }
+        .image-placeholder:hover {
+            transform: rotate(0deg) scale(1.03); 
+            animation-play-state: paused; 
+        }
+
+        /* [RESTO DE ESTILOS NO CRÍTICOS PERMANECEN IGUAL] */
+        .image-placeholder:nth-child(2) { --img-rotate: 2deg; }
+        .image-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+        .signature { margin-top: 40px; text-align: right; font-family: 'Charmonman', cursive; font-size: 3.5rem; color: var(--magic-pink); grid-column: 1 / 3; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        /* ... otros estilos de carta y media queries ... */
+
+    </style>
+</head>
+
+<body>
+
+    <div class="heart-glow-container"></div>
+    <div class="pixie-dust-container"></div>
+    
+    <div id="explosion-container"></div>
+
+    <div class="main-content" id="main-content">
+        <h1 class="title">Para mi amada Erika</h1>
+
+        <button id="magic-button" class="heart-button" onclick="launchMagicInterface()">
+            <span class="button-text">Abrir</span>
+        </button>
+        
+        <p class="instruction-text">Pulsa con amor el corazón mágico.</p>
+    </div>
+
+    <div id="destination-interface">
+        <div class="love-card">
+            <div class="wax-seal">E</div> 
+            <h1 class="card-header" id="card-header">Para mi preciosa <span>Erika</span>,</h1>
+
+            <div class="card-body">
+                <p>
+                    Mi querida Erika, quería tejer unas palabras para ti, no como en un libro viejo, sino como un susurro en medio del día.
+                    Contigo, cada momento es una pequeña joya que guardo. Tu manera de ser, tu sonrisa, esa chispa en tus ojos...
+                    todo en ti es una canción que me encanta escuchar.
+                </p>
+
+                <p>
+                   Contigo a mi lado mis días son felices, sin ti son tristes y largos, eres esa motivación que me enciende, alguien a quien no cambiaría por nada del mundo, solo quiero recordarte que contigo me siento muy feliz y espero podamos estar mucho tiempo juntos mi amor.
+                </p>
+
+                <p>
+                    Una vida sin ti es una vida que no quiero vivir.
+                </p>
+                
+            </div>
+            
+            <div class="image-gallery">
+                <div class="image-placeholder" id="img-placeholder-1">
+                    <img src="Imagen1.jpg" alt="Nuestro primer recuerdo">
+                </div>
+                
+                <div class="image-placeholder" id="img-placeholder-2">
+                    <img src="Imagen2.jpg" alt="Nuestro primer recuerdo">
+                </div>
+            </div>
+            
+            <div class="signature">
+                Con todo mi corazón,<br>
+                Erick
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- FUNCIONES DE GENERACIÓN DE PARTÍCULAS (MANTENIDAS) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // [CÓDIGO DE GENERACIÓN DE CORAZONES FLOTANTES]
+            const heartContainer = document.querySelector('.heart-glow-container');
+            const numHearts = 25;
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-glow');
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                heart.style.animationDelay = `${Math.random() * 20}s`;
+                heart.style.setProperty('--translateX', `${(Math.random() - 0.5) * 50}vw`);
+                heartContainer.appendChild(heart);
+            }
+
+            // [CÓDIGO DE GENERACIÓN DE DUST DORADO]
+            const pixieContainer = document.querySelector('.pixie-dust-container');
+            const numDust = 40;
+            for (let i = 0; i < numDust; i++) {
+                const dust = document.createElement('div');
+                dust.classList.add('pixie-dust');
+                const startX = `${50 + (Math.random() - 0.5) * 40}vw`;
+                const startY = `${50 + (Math.random() - 0.5) * 40}vh`;
+                const midX = `${50 + (Math.random() - 0.5) * 60}vw`;
+                const midY = `${50 + (Math.random() - 0.5) * 60}vh`;
+                const endX = `${Math.random() * 100}vw`;
+                const endY = `${Math.random() * 100}vh`;
+                dust.style.setProperty('--startX', startX);
+                dust.style.setProperty('--startY', startY);
+                dust.style.setProperty('--midX', midX);
+                dust.style.setProperty('--midY', midY);
+                dust.style.setProperty('--endX', endX);
+                dust.style.setProperty('--endY', endY);
+                dust.style.animationDelay = `${Math.random() * 10}s`;
+                dust.style.animationDuration = `${Math.random() * 5 + 8}s`;
+                pixieContainer.appendChild(dust);
+            }
+
+            // NUEVO: Ocultar el texto del header inicialmente para el efecto de escritura
+            const header = document.getElementById('card-header');
+            if (header) {
+                // Removemos la animación de escritura al inicio, se añade en el launchMagicInterface
+                header.style.width = '0%';
+                header.style.borderRight = '0.15em solid transparent';
+                header.style.animation = 'none';
+            }
+        });
+
+
+        // --- FUNCIÓN DE TRANSICIÓN MEJORADA CON EXPLOSIÓN 3D ---
+        function launchMagicInterface() {
+            const body = document.body;
+            const mainContent = document.getElementById('main-content');
+            const destination = document.getElementById('destination-interface');
+            const button = document.getElementById('magic-button');
+            const explosionContainer = document.getElementById('explosion-container');
+            const header = document.getElementById('card-header');
+
+            button.disabled = true;
+            mainContent.style.opacity = '0';
+            mainContent.style.transform = 'scale(0.8)';
+            body.classList.add('transition-effect'); // Dispara el efecto de la explosión
+
+            // 1. Generar la explosión de corazones
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('exploding-heart');
+                
+                // Posiciones de dispersión aleatorias
+                const endX = `${(Math.random() - 0.5) * 500}px`;
+                const endY = `${(Math.random() - 0.5) * 500}px`;
+                
+                heart.style.setProperty('--endX', endX);
+                heart.style.setProperty('--endY', endY);
+                heart.style.left = '50%';
+                heart.style.top = '50%';
+                heart.style.animation = `explodeHeart 1s ease-out forwards`;
+                heart.style.animationDelay = `${Math.random() * 0.3}s`; // Pequeño delay para el efecto
+                
+                explosionContainer.appendChild(heart);
+            }
+
+            // 2. Transición y aparición de la segunda interfaz
+            setTimeout(() => {
+                mainContent.style.display = 'none';
+                destination.classList.add('show');
+                body.classList.remove('transition-effect');
+                explosionContainer.innerHTML = ''; // Limpiar los corazones
+
+                // 3. Activar la animación de escritura
+                if (header) {
+                    header.style.width = '100%';
+                    header.style.borderRight = 'none'; // Se establece en CSS para la animación
+                    header.style.animation = 'typing 3s steps(35, end) forwards, blink-caret .75s step-end infinite';
+                }
+            }, 750);
+        }
+    </script>
+</body>
+</html>
